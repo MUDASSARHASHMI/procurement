@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block head_title %}
+Procurement | all_orders
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="col-md-11 col-md-offset-1">
+<div class="row">
+	{% for order in all_orders %}
+	<div class="col-sm-3">
+		<div class="thumbnail">
+			<div class="caption">
+				<h3>{{order.title}}</h3>
+				<p>{{order.description|truncatechars:150}}</p>
+				{% if order.pub_date %}<p><b>Posted:</b>{{order.pub_date}}</p>{% endif %}
+				{% if order.expire_date %}<p><b>Expires </b>{{order.expire_date|timeuntil}} from now</p> 
+				{% endif %}
+				
+					<a href="/view_order/{{ order.slug }}" class="btn btn-default" role="button">View Details</a>
+					
+				</p>
+
+			</div>
+		</div>
+	</div>
+	{% cycle '' '' '' '</div><div class="row">' %}
+	{% endfor %}
+</div>
+
+{% endblock %}
+

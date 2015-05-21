@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}
+order details
+{% endblock %}
+
+{% block jquery %}
+
+$year =  {{ order.expire_date|date:"Y" }};
+$month = {{ order.expire_date|date:"m" }};
+$day =	 {{ order.expire_date|date:"d" }};
+
+$exp_date = new Date($year, $month -1, $day);
+
+$("#defaultCountdown").countdown({
+	until: $exp_date,
+	onExpiry: fadeExpireOut
+});
+function fadeExpireOut(){
+	$("#defaultCountdown").fadeOut();
+}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+	<div class="col-sm-6 pull-left">
+		<div class="thumbnail">
+			<div class="caption">
+				<h3>{{order.title}}</h3>
+				<p>{{order.description|truncatechars:150}}</p>
+				{% if order.pub_date %}<p><b>Posted:</b>{{order.pub_date}}</p>{% endif %}
+				{% if order.expire_date %}<p><b>Expires </b>{{order.expire_date|timeuntil}} from now</p> 
+				{% endif %}
+				
+					<a href='{% url "bid" order.slug %}' class="btn btn-success" role="button">Bid</a>
+				</p>
+
+			</div>
+		</div>
+	</div>
+
+	<div class='col-sm-6 pull-right'>
+		<div class="panel panel-default">
+  		<div class="panel-heading">
+    	<h3 class="panel-title">Expiry:</h3>
+  		</div>
+  		<div class="panel-body">
+    	<div id='defaultCountdown'></div>
+  		</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+{% endblock %}
